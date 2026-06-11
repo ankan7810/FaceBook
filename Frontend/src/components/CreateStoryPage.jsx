@@ -30,7 +30,7 @@ const CreateStoryPage = () => {
       setLoading(true);
 
       await axios.post(
-        "http://localhost:3000/api/v1/strory/create",
+        "https://facebook-backend-6nqa.onrender.com/api/v1/strory/create",
         formData,
         { withCredentials: true }
       );
