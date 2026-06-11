@@ -16,6 +16,9 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+console.log("EMAIL:", process.env.EMAIL);
+console.log("PASSWORD EXISTS:", !!process.env.EMAIL_PASSWORD);
+
 transporter.verify((error, success) => {
   if (error) {
     console.log("Mail Server Error:", error);
