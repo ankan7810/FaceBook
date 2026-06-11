@@ -1,7 +1,7 @@
 import { io } from "socket.io-client";
 
 // Create a SINGLE shared socket instance
-export const socket = io("http://localhost:3000", {
+export const socket = io("https://facebook-backend-6nqa.onrender.com", {
   transports: ["websocket"],     // avoid polling issues
   withCredentials: true,         // needed if using cookies/JWT
   autoConnect: false,            // manual connect control
