@@ -142,7 +142,7 @@ const Signup = () => {
               onClick={() => setShowPassword(!showPassword)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm"
             >
-              {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+              {showPassword ? <FaRegEye className="w-4 h-4 cursor-pointer" /> : <FaRegEyeSlash className="w-4 h-4 cursor-pointer" />}
             </button>
           </div>
 
@@ -244,20 +244,14 @@ const Signup = () => {
           )}
 
           {/* Submit */}
-          <button className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg w-full text-lg">
+          <button className="bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-lg w-full text-lg cursor-pointer">
             Sign Up
           </button>
 
           <Link to="/login" className="text-blue-600 text-center block text-sm hover:underline">
             Already have an account?
           </Link>
-
         </form>
-        <div className="flex justify-center mt-6 border-4  border-gray-300 border-radius-md p-3 rounded-md cursor=pointer">
-          <button>
-            Sign Up with Google
-          </button>
-        </div>
       </div>
     </div>
   );
