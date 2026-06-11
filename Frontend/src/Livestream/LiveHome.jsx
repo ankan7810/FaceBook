@@ -28,7 +28,7 @@ const LiveHome = () => {
 
   const fetchStreams = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/v1/livestream");
+      const res = await axios.get("https://facebook-backend-6nqa.onrender.com/api/v1/livestream");
       setStreams(res.data); // already sorted + limited
     } catch (err) {
       console.error(err);
