@@ -1,0 +1,60 @@
+# Dependencies
+node_modules/
+
+# Environment Variables
+.env
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage
+coverage/
+
+# Build folders
+dist/
+build/
+
+# Cache
+.cache/
+.parcel-cache/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+tmp/
+temp/
+
+# Uploaded files
+Uploads/
+
+# Cloudinary temp files
+*.tmp
+
+# MongoDB local files
+data/
+*.wt
+
+# PM2
+.pm2/
+
+# dotenv backups
+.env.*
+!.env.example
