@@ -182,7 +182,7 @@ const stopLive = async () => {
 
   try {
     await axios.post(
-      `${BASE_URL}/livestream/end/${streamId}`,
+      `https://facebook-backend-6nqa.onrender.com/api/v1/livestream/end/${streamId}`,
       {},
       { withCredentials: true }
     );
