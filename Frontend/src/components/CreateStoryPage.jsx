@@ -3,7 +3,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "@/Utils/Constant.js";
 
-// const BASE_URL = "http://localhost:3000/api/v1";
 
 const CreateStoryPage = () => {
   const navigate = useNavigate();
