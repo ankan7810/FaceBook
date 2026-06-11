@@ -9,19 +9,13 @@ dotenv.config(
 
 
 const transporter = nodemailer.createTransport({
-service: "gmail",
-  auth:{
-    user:process.env.EMAIL,
-    pass:process.env.EMAIL_PASSWORD
-  }
-})
-
-transporter.verify(function (error, success) {
-    if (error) {
-        console.log("Error connecting to gmail server error: ",error);
-    } else {
-        console.log("Connected with Gmail server !!");
-    }
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.EMAIL_PASSWORD,
+  },
 });
 
 export const sendOtpMail = async (email, otp) => {
