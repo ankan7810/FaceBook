@@ -235,7 +235,7 @@ export const logout = async (req, res) => {
 
 export const sendOtp = async (req, res) => {
   try {
-    const { email } = req.body;
+    const { email } = req.body
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "User does not exist." });
@@ -245,6 +245,7 @@ export const sendOtp = async (req, res) => {
     user.otpExpires = Date.now() + 5 * 60 * 1000;
     user.isOtpVerified = false;
     await user.save();
+    
     await sendOtpMail(email, otp);
     return res.status(200).json({ message: "otp sent successfully" });
   } catch (error) {
