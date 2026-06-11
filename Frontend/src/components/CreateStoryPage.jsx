@@ -30,7 +30,7 @@ const CreateStoryPage = () => {
       setLoading(true);
 
       await axios.post(
-        `${BASE_URL}/story/create`,
+        "http://localhost:3000/api/v1/strory/create",
         formData,
         { withCredentials: true }
       );
