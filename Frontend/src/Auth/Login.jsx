@@ -139,7 +139,7 @@ if (res.data.success) {
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
               >
-                {showPassword ? <FaRegEye /> : <FaRegEyeSlash />}
+                {showPassword ? <FaRegEye className="cursor-pointer"/> : <FaRegEyeSlash className="cursor-pointer"/>}
               </button>
             </div>
 
@@ -153,7 +153,7 @@ if (res.data.success) {
             {/* Login Button */}
             <button
               disabled={loading}
-              className="bg-blue-600 hover:bg-blue-700 transition text-white py-3 rounded-lg font-semibold text-lg w-full disabled:opacity-50"
+              className="bg-blue-600 hover:bg-blue-700 transition text-white py-3 rounded-lg font-semibold text-lg w-full disabled:opacity-50 cursor-pointer"
             >
               {loading ? "Logging in..." : "Log In"}
             </button>
@@ -172,7 +172,7 @@ if (res.data.success) {
             <Link to="/signup">
               <button
                 type="button"
-                className="bg-green-600 hover:bg-green-700 transition text-white py-3 rounded-lg font-semibold w-full"
+                className="bg-green-600 hover:bg-green-700 transition text-white py-3 rounded-lg font-semibold w-full cursor-pointer"
               >
                 Create new account
               </button>
