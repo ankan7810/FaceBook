@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import ChatBox from "./ChatBox.jsx";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
-
+import { BASE_URL } from "@/Utils/Constant.js";
 const GoLive = () => {
   const videoRef = useRef(null);
   const localStream = useRef(null);
@@ -78,7 +78,7 @@ const GoLive = () => {
       setLoading(true);
 
       const res = await axios.post(
-        "https://facebook-backend-6nqa.onrender.com/api/v1/livestream/create",
+        `${BASE_URL}/livestream/create`,
         { title },
         { withCredentials: true }
       );
@@ -182,7 +182,7 @@ const stopLive = async () => {
 
   try {
     await axios.post(
-      `http://localhost:3000/api/v1/livestream/end/${streamId}`,
+      `${BASE_URL}/livestream/end/${streamId}`,
       {},
       { withCredentials: true }
     );
