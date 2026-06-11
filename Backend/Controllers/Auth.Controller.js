@@ -235,7 +235,9 @@ export const logout = async (req, res) => {
 
 export const sendOtp = async (req, res) => {
   try {
-    const { email } = req.body
+    const { email } = req.body;
+     console.log("EMAIL:", email);
+    console.log("OTP FROM FRONTEND:", otp);
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: "User does not exist." });
