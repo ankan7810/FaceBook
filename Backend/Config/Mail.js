@@ -18,6 +18,14 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+transporter.verify((error, success) => {
+  if (error) {
+    console.log("Mail Server Error:", error);
+  } else {
+    console.log("Mail Server Connected");
+  }
+});
+
 export const sendOtpMail = async (email, otp) => {
     try {
         const mailOptions = {
