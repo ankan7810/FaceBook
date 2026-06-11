@@ -17,7 +17,6 @@ import { BASE_URL } from "@/Utils/Constant.js";
 
 
 const userCache = {};
-// const BASE_URL = "http://localhost:3000/api/v1";
 
 const PostCard = ({ post }) => {
   const navigate = useNavigate();
