@@ -52,6 +52,8 @@ export const sendRegistertationMail = async (email, name) => {
         };
         await transporter.sendMail(mailOptions);
     } catch (error) {
-       return resizeBy.status(500).json({ message: `Registration email error: ${error.message}` });
+       // return resizeBy.status(500).json({ message: `Registration email error: ${error.message}` });
+        console.error("OTP email error:", error);
+        throw error;
     }
 };
