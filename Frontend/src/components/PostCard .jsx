@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import { FaRegBookmark } from "react-icons/fa";
 import { GoBookmarkSlash } from "react-icons/go";
-
 import CommentSection from "./CommentSection";
 import ShareModal from "./ShareModal";
 import { useSelector } from "react-redux";
@@ -58,6 +57,14 @@ const PostCard = ({ post }) => {
   const [isLiked, setIsLiked] = useState(
     post?.likes?.some(id => id.toString() === user?._id)
   );
+
+useEffect(() => {
+  setIsSaved(
+    post?.savedBy?.some(
+      id => id.toString() === user?._id
+    ) || false
+  );
+}, [post, user]);
 
   const menuRef = useRef();
 
@@ -201,7 +208,7 @@ const PostCard = ({ post }) => {
       if (saved) {
         toast.success("Post saved");
       } else {
-        toast("Post removed from saved");
+        toast.success("Post removed from saved");
       }
 
     } catch (err) {
