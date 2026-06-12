@@ -1,217 +1,278 @@
-import React, { useEffect } from 'react'
-import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import { useDispatch } from "react-redux"
-import { setUser } from "./redux/authSlice"
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import {
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Typography,
+  TextField,
+  CircularProgress,
+} from "@mui/material";
+import { UploadCloud, Image, Video } from "lucide-react";
+import toast from "react-hot-toast";
+import { BASE_URL } from "@/Utils/Constant.js";
+import { useNavigate } from "react-router-dom";
 
-import Login from './Auth/Login'
-import Signup from './Auth/Singup'
-import ForgotPassword from './Auth/ForgotPassword'
-import ResetPassword from './Auth/ResetPassword'
-import VerifyOtp from './Auth/VerifyOtp'
-import Home from './components/Home.jsx'
-import UpdatePost from './pages/UpdatePost'
-import DeletePost from './pages/DeletePost'
-import UploadVideo from './components/UploadVideo'
-import UpdateVideo from './pages/UpdateVideo'
-import CreateStoryPage from './components/CreateStoryPage'
-import PrivacyPolicy from './pages/PrivacyPolicy'
-import ReelsPage from './pages/ReelsPage'
-import { Toaster } from "react-hot-toast";
-import SavedPage from './pages/SavedPage'
-import UploadReel from './pages/UploadReel'
-import Profile from './pages/Profile'
-import FriendsPage from './pages/FriendsPage'
-import FriendRequests from './pages/FriendRequests'
-import Suggestions from './pages/Suggestions'
-import AllFriends from './pages/AllFriends'
-import LiveHome from './Livestream/LiveHome'
-import GoLive from './Livestream/GoLive'
-import LiveRoom from './Livestream/LiveRoom'
-import ExclusiveContent from './pages/ExclusiveContent'
-import Marketplace from './pages/Marketplace'
-import MarketplaceProductDetails from './pages/MarketplaceProductDetails'
-import CreateMarketplaceListing from './pages/CreateMarketplaceListing '
-// import LiveStream from './Livestream/LiveStream.jsx'
+const UploadReel = () => {
+  const [video, setVideo] = useState(null);
+  const [thumbnail, setThumbnail] = useState(null);
 
-const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = true; // later connect with redux
+  const [videoPreview, setVideoPreview] = useState("");
+  const [thumbnailPreview, setThumbnailPreview] = useState("");
 
-  return isAuthenticated ? children : <Login />;
-};
+  const [caption, setCaption] = useState("");
+  const [loading, setLoading] = useState(false);
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <ProtectedRoute><Home /></ProtectedRoute>,
-  },
-  { path: "/login", element: <Login /> },
-  { path: "/signup", element: <Signup /> },
-  { path: "/forgot-password", element: <ForgotPassword /> },
-  { path: "/verify-otp", element: <VerifyOtp /> },
-  { path: "/reset-password", element: <ResetPassword /> },
+  const navigate = useNavigate();
 
-  {
-    path: "/update-post/:postId",
-    element: <ProtectedRoute><UpdatePost /></ProtectedRoute>,
-  },
-  {
-    path: "/delete-post/:postId",
-    element: <ProtectedRoute><DeletePost /></ProtectedRoute>,
-  },
-  {
-    path: "/upload-video",
-    element: <ProtectedRoute><UploadVideo /></ProtectedRoute>,
-  },
-  {
-    path: "/update-video/:videoId",
-    element: <ProtectedRoute><UpdateVideo /></ProtectedRoute>,
-  },
-  {
-    path: "/create-story",
-    element: <ProtectedRoute><CreateStoryPage /></ProtectedRoute>,
-  },
-  {
-    path: "/privacy-policy",
-    element: <ProtectedRoute><PrivacyPolicy /></ProtectedRoute>,
-  },
-  {
-    path: "/reels",
-    element: <ProtectedRoute><ReelsPage /></ProtectedRoute>,
-  },
-  {
-    path: "/upload-reel",
-    element: <ProtectedRoute><UploadReel /></ProtectedRoute>,
-  },
-  {
-    path: "/saved",
-    element: <ProtectedRoute><SavedPage /></ProtectedRoute>,
-  },
+  const handleVideoChange = (e) => {
+    const file = e.target.files[0];
 
+    if (!file) return;
 
-  {
-    path: "/live",
-    element: <ProtectedRoute><LiveHome /></ProtectedRoute>,
-  },
-  {
-    path: "/go-live",
-    element: <ProtectedRoute><GoLive /></ProtectedRoute>,
-  },
-  {
-    path: "/live/:id",
-    element: <ProtectedRoute><LiveRoom /></ProtectedRoute>,
-  },
+    if (videoPreview) {
+      URL.revokeObjectURL(videoPreview);
+    }
 
-  {
-    path: "/exclusive/:userId",
-    element: <ProtectedRoute><ExclusiveContent /></ProtectedRoute>,
-  },
+    setVideo(file);
+    setVideoPreview(URL.createObjectURL(file));
+  };
 
-  {
-    path: "/market",
-    element: <ProtectedRoute><Marketplace /></ProtectedRoute>
-  },
+  const handleThumbnailChange = (e) => {
+    const file = e.target.files[0];
 
-  {
-    path: "/market/:id",
-    element: <ProtectedRoute><MarketplaceProductDetails /></ProtectedRoute>
-  },
+    if (!file) return;
 
+    if (thumbnailPreview) {
+      URL.revokeObjectURL(thumbnailPreview);
+    }
 
-  {
-    path: "/market/create",
-    element: <ProtectedRoute><CreateMarketplaceListing /></ProtectedRoute>
-  },
+    setThumbnail(file);
+    setThumbnailPreview(URL.createObjectURL(file));
+  };
 
-  {
-    path: "/profile/:userId",
-    element: <ProtectedRoute><Profile /></ProtectedRoute>,
-  },
-  {
-    path: "/friends",
-    element: <ProtectedRoute><FriendsPage /></ProtectedRoute>,
-    children: [
-      {
-        path: "requests",
-        element: <ProtectedRoute><FriendRequests /></ProtectedRoute>,
-      },
-      {
-        path: "suggestions",
-        element: <ProtectedRoute><Suggestions /></ProtectedRoute>,
-      },
-      {
-        path: "all",
-        element: <ProtectedRoute><AllFriends /></ProtectedRoute>,
-      },
-    ],
-  },
-
-  {
-    path: "*",
-    element: (
-      <div style={{ padding: "40px", textAlign: "center" }}>
-        <h2>404 - Page Not Found</h2>
-      </div>
-    ),
-  },
-]);
-
-const App = () => {
-  const dispatch = useDispatch();
-
-  // 🔥 THIS IS THE MISSING PIECE
   useEffect(() => {
-    const savedUser = localStorage.getItem("user");
+    return () => {
+      if (videoPreview) URL.revokeObjectURL(videoPreview);
+      if (thumbnailPreview) URL.revokeObjectURL(thumbnailPreview);
+    };
+  }, [videoPreview, thumbnailPreview]);
 
-    if (!savedUser) return;
+  const handleUpload = async () => {
+    if (!video) {
+      toast.error("Video is required 🎥");
+      return;
+    }
 
     try {
-      const parsed = JSON.parse(savedUser);
+      setLoading(true);
 
-      if (parsed && parsed._id) {
-        dispatch(setUser(parsed));
-      } else {
-        localStorage.removeItem("user");
+      const formData = new FormData();
+
+      formData.append("video", video);
+
+      if (thumbnail) {
+        formData.append("thumbnail", thumbnail);
       }
-    } catch (e) {
-      localStorage.removeItem("user", e);
+
+      formData.append("caption", caption);
+
+      const res = await axios.post(
+        `${BASE_URL}/reels/create`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
+
+      if (res.data.success) {
+        toast.success("Reel uploaded successfully 🚀");
+
+        setVideo(null);
+        setThumbnail(null);
+        setVideoPreview("");
+        setThumbnailPreview("");
+        setCaption("");
+
+        navigate("/");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        error?.response?.data?.message || "Upload failed ❌"
+      );
+    } finally {
+      setLoading(false);
     }
-  }, [dispatch]);
-
-
-  useEffect(() => {
-    if (window.Razorpay) return;
-
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.async = true;
-
-    script.onload = () => {
-      console.log("Razorpay SDK loaded ✅");
-    };
-
-    script.onerror = () => {
-      console.error("Razorpay SDK failed ❌");
-    };
-
-    document.body.appendChild(script);
-  }, []);
+  };
 
   return (
-    <>
-      <RouterProvider router={router} />
-      <Toaster
-        position="top-center"
-        toastOptions={{
-          duration: 2000,
-          style: {
-            background: "#333",
-            color: "#fff",
-            borderRadius: "10px",
-          },
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background:
+          "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+        p: 2,
+      }}
+    >
+      <Card
+        sx={{
+          width: "100%",
+          maxWidth: 450,
+          borderRadius: 4,
+          background: "#fff",
+          boxShadow: "0 20px 50px rgba(0,0,0,0.15)",
         }}
-      />
-    </>
+      >
+        <CardContent sx={{ p: 3 }}>
+          <Typography
+            variant="h5"
+            fontWeight="bold"
+            textAlign="center"
+            mb={3}
+          >
+            Upload Reel 🎬
+          </Typography>
+
+          {/* Video Upload */}
+          <Button
+            component="label"
+            fullWidth
+            startIcon={<Video />}
+            sx={{
+              mb: 2,
+              p: 1.5,
+              borderRadius: 3,
+              bgcolor: "#f5f5f5",
+              color: "#333",
+              justifyContent: "flex-start",
+              textTransform: "none",
+              fontWeight: 600,
+            }}
+          >
+            {video ? video.name : "Select Video"}
+            <input
+              hidden
+              type="file"
+              accept="video/*"
+              onChange={handleVideoChange}
+            />
+          </Button>
+
+          {/* Video Preview */}
+          {videoPreview && (
+            <video
+              src={videoPreview}
+              controls
+              style={{
+                width: "100%",
+                borderRadius: "12px",
+                marginBottom: "16px",
+                maxHeight: "400px",
+                objectFit: "contain",
+                background: "#000",
+              }}
+            />
+          )}
+
+          {/* Thumbnail Upload */}
+          <Button
+            component="label"
+            fullWidth
+            startIcon={<Image />}
+            sx={{
+              mb: 2,
+              p: 1.5,
+              borderRadius: 3,
+              bgcolor: "#f5f5f5",
+              color: "#333",
+              justifyContent: "flex-start",
+              textTransform: "none",
+              fontWeight: 600,
+            }}
+          >
+            {thumbnail
+              ? thumbnail.name
+              : "Select Thumbnail (Optional)"}
+
+            <input
+              hidden
+              type="file"
+              accept="image/*"
+              onChange={handleThumbnailChange}
+            />
+          </Button>
+
+          {/* Thumbnail Preview */}
+          {thumbnailPreview && (
+            <img
+              src={thumbnailPreview}
+              alt="thumbnail"
+              style={{
+                width: "100%",
+                borderRadius: "12px",
+                marginBottom: "16px",
+                maxHeight: "250px",
+                objectFit: "cover",
+              }}
+            />
+          )}
+
+          {/* Caption */}
+          <TextField
+            fullWidth
+            multiline
+            rows={4}
+            placeholder="Write a caption..."
+            value={caption}
+            onChange={(e) => setCaption(e.target.value)}
+            sx={{ mb: 3 }}
+          />
+
+          {/* Upload Button */}
+          <Button
+            fullWidth
+            disabled={loading}
+            onClick={handleUpload}
+            sx={{
+              py: 1.5,
+              borderRadius: 3,
+              color: "#fff",
+              fontWeight: "bold",
+              background:
+                "linear-gradient(45deg, #1877f2, #42a5f5)",
+              "&:hover": {
+                background:
+                  "linear-gradient(45deg, #166fe5, #1e88e5)",
+              },
+            }}
+          >
+            {loading ? (
+              <CircularProgress
+                size={24}
+                sx={{ color: "#fff" }}
+              />
+            ) : (
+              <>
+                <UploadCloud
+                  size={18}
+                  style={{ marginRight: 8 }}
+                />
+                Upload Reel
+              </>
+            )}
+          </Button>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 
-export default App;
+export default UploadReel;
