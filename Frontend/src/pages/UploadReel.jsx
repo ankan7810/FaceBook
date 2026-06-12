@@ -12,6 +12,7 @@ import {
 import { UploadCloud, Image, Video } from "lucide-react";
 import toast from "react-hot-toast";
 import { BASE_URL } from "@/Utils/Constant.js";
+import { useNavigate } from "react-router-dom";
 
 // const BASE_URL = "http://localhost:3000/api/v1";
 
@@ -20,6 +21,7 @@ const UploadReel = () => {
   const [thumbnail, setThumbnail] = useState(null);
   const [caption, setCaption] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
 const handleUpload = async () => {
   if (!video) {
@@ -50,6 +52,7 @@ const handleUpload = async () => {
       setVideo(null);
       setThumbnail(null);
       setCaption("");
+      navigate("/");
     }
   } catch (err) {
     console.error(err);
