@@ -15,6 +15,13 @@ import { BASE_URL } from "@/Utils/Constant.js";
 import { useNavigate } from "react-router-dom";
 
 const UploadReel = () => {
+  useEffect(() => {
+  console.log("UploadReel Mounted");
+
+  return () => {
+    console.log("UploadReel Unmounted");
+  };
+}, []);
   const [video, setVideo] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
 
