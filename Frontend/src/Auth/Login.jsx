@@ -72,16 +72,16 @@ if (res.data.success) {
   }
 
   // 🔥 👉 ADD HERE (THIS IS THE LINE YOU ASKED ABOUT)
-  localStorage.setItem("user", JSON.stringify(user));
+localStorage.setItem("user", JSON.stringify(user));
 
-  // Redux update
-  dispatch(setUser(user));
-  dispatch(setError(null));
+// 🔥 User has successfully logged in at least once
+localStorage.setItem("hasLoggedIn", "true");
 
-  console.log("USER SAVED:", user);
+dispatch(setUser(user));
+dispatch(setError(null));
 
-  toast.success(res.data.message);
-  navigate("/");
+toast.success(res.data.message);
+navigate("/");
 }
       else {
         dispatch(setError(res.data.message));
