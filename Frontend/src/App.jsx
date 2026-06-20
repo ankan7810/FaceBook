@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { createBrowserRouter, RouterProvider } from "react-router-dom"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { setUser } from "./redux/authSlice"
 
 import Login from './Auth/Login'
@@ -31,21 +31,61 @@ import ExclusiveContent from './pages/ExclusiveContent'
 import Marketplace from './pages/Marketplace'
 import MarketplaceProductDetails from './pages/MarketplaceProductDetails'
 import CreateMarketplaceListing from './pages/CreateMarketplaceListing '
-// import LiveStream from './Livestream/LiveStream.jsx'
+import { Navigate } from "react-router-dom";
 
-const ProtectedRoute = ({ children }) => {
-  const isAuthenticated = true; // later connect with redux
 
-  return isAuthenticated ? children : <Login />;
+const RootRoute = () => {
+  const { user } = useSelector((state) => state.auth);
+
+  const hasLoggedIn = localStorage.getItem("hasLoggedIn");
+
+  if (user) {
+    return <Home />;
+  }
+
+  return hasLoggedIn
+    ? <Navigate to="/login" replace />
+    : <Navigate to="/signup" replace />;
 };
 
+const ProtectedRoute = ({ children }) => {
+  const { user } = useSelector((state) => state.auth);
+
+  return user ? children : <Navigate to="/login" replace />;
+};
+const GuestRoute = ({ children }) => {
+  const { user } = useSelector((state) => state.auth);
+
+  return user ? <Navigate to="/" replace /> : children;
+};
+
+
 const router = createBrowserRouter([
+  // {
+  //   path: "/",
+  //   element: <ProtectedRoute><Home /></ProtectedRoute>,
+  // },
+
   {
-    path: "/",
-    element: <ProtectedRoute><Home /></ProtectedRoute>,
-  },
-  { path: "/login", element: <Login /> },
-  { path: "/signup", element: <Signup /> },
+  path: "/",
+  element: <RootRoute />,
+},
+  {
+  path: "/login",
+  element: (
+    <GuestRoute>
+      <Login />
+    </GuestRoute>
+  ),
+},
+{
+  path: "/signup",
+  element: (
+    <GuestRoute>
+      <Signup />
+    </GuestRoute>
+  ),
+},
   { path: "/forgot-password", element: <ForgotPassword /> },
   { path: "/verify-otp", element: <VerifyOtp /> },
   { path: "/reset-password", element: <ResetPassword /> },
