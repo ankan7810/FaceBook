@@ -8,30 +8,18 @@ dotenv.config(
 );
 
 
-// const transporter = nodemailer.createTransport({
-//   service: "Gmail",
-//   port: 465,
-//   secure: true,
-//   auth: {
-//     user: process.env.EMAIL,
-//     pass: process.env.EMAIL_PASSWORD,
-//   },
-// });
-
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
+  service: "Gmail",
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.EMAIL,
     pass: process.env.EMAIL_PASSWORD,
   },
-  debug: true,
-  logger: true,
 });
 
-console.log("EMAIL:", process.env.EMAIL);
-console.log("PASSWORD EXISTS:", !!process.env.EMAIL_PASSWORD);
+// console.log("EMAIL:", process.env.EMAIL);
+// console.log("PASSWORD EXISTS:", !!process.env.EMAIL_PASSWORD);
 
 transporter.verify((error, success) => {
   if (error) {
