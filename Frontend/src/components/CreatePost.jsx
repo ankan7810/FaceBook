@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { FaVideo, FaImages } from "react-icons/fa";
+import { BsFillCameraReelsFill } from "react-icons/bs";
 import { HiOutlineEmojiHappy } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import EmojiPicker from "emoji-picker-react";
@@ -201,8 +202,19 @@ const CreatePost = () => {
               }}
               onClick={() => navigate("/upload-video")}
             >
-              <FaVideo />
+              <BsFillCameraReelsFill />
               <span>Video</span>
+            </div>
+            <div
+              style={{
+                ...styles.actionBtn,
+                background: isDark ? "#3a3b3c" : "#f0f2f5",
+                color: isDark ? "#e4e6eb" : "#000",
+              }}
+              onClick={() => navigate("/upload-reel")}
+            >
+              <FaVideo />
+              <span>Reel</span>
             </div>
           </div>
 
