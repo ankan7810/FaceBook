@@ -34,6 +34,22 @@ const Navbar = () => {
     document.documentElement.classList.contains("dark")
   );
 
+  const [isNewUser, setIsNewUser] = useState(false);
+
+useEffect(() => {
+  const firstVisit = localStorage.getItem("firstVisit");
+
+  if (!firstVisit) {
+    localStorage.setItem("firstVisit", "true");
+    setIsNewUser(true);
+
+    // Stop highlighting after 30 seconds
+    setTimeout(() => {
+      setIsNewUser(false);
+    }, 30000);
+  }
+}, []);
+
   useEffect(() => {
     const observer = new MutationObserver(() => {
       setIsDark(document.documentElement.classList.contains("dark"));
@@ -86,7 +102,7 @@ const Navbar = () => {
         navigate("/");
         break;
       case "video":
-        navigate("/upload-reel");
+        navigate("/reels");
         break;
       case "market":
         navigate("/market");
@@ -97,31 +113,30 @@ const Navbar = () => {
     }
   };
 
-
-
   const handleLogout = async () => {
-    try {
-      await axios.post(
-        `${BASE_URL}/auth/logout`,
-        {},
-        { withCredentials: true }
-      );
+  try {
+    await axios.post(
+      `${BASE_URL}/auth/logout`,
+      {},
+      { withCredentials: true }
+    );
 
-      // ✅ Update Redux state
-      dispatch(logoutUser());
+    // Clear localStorage
+    localStorage.removeItem("user");
 
-      // ✅ Navigate immediately
-      navigate("/login");
+    // Clear Redux
+    dispatch(logoutUser());
 
-      // ✅ Optional toast
-      toast.success("Logged out successfully");
+    toast.success("Logged out successfully");
 
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message || "Logout failed"
-      );
-    }
-  };
+    navigate("/login", { replace: true });
+
+  } catch (error) {
+    toast.error(
+      error.response?.data?.message || "Logout failed"
+    );
+  }
+};
 
   return (
     <div style={styles.navbar(isDark)}>
@@ -175,9 +190,9 @@ const Navbar = () => {
       <div style={styles.center}>
         {[
           { icon: <Home size={22} />, key: "home", label: "Home" },
-          { icon: <Video size={22} />, key: "video", label: "Upload reels" },
+          { icon: <Video size={22} />, key: "video", label: "Reels" },
           { icon: <ShoppingBag size={22} />, key: "market", label: "Market" },
-          { icon: <Users size={22} />, key: "groups", label: "Groups" },
+          { icon: <Users size={22} />, key: "groups", label: "Friends" },
         ].map((item) => (
           <div
             key={item.key}
@@ -227,11 +242,14 @@ const Navbar = () => {
       label: "Logout",
       element: (
         <div
-          style={styles.circleBtns(isDark)}
-          onClick={handleLogout}
-        >
-          <SlLogout size={18} />
-        </div>
+  style={{
+    ...styles.circleBtns(isDark),
+    ...(isNewUser ? styles.newUserLogout : {})
+  }}
+  onClick={handleLogout}
+>
+  <SlLogout size={18} />
+</div>
       ),
     },
     {
@@ -351,6 +369,12 @@ const styles = {
     alignItems: "center",
     gap: "12px",
   },
+  newUserLogout: {
+  background: "#7f0000",
+  color: "#fff",
+  animation: "heartbeat 1s infinite",
+  boxShadow: "0 0 15px rgba(127,0,0,0.8)",
+},
 
   circleBtn: (dark) => ({
     width: "40px",
